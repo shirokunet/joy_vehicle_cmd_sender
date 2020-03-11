@@ -4,5 +4,4 @@
 
     <node pkg="joy_vehicle_cmd_sender" type="joy_vehicle_cmd_sender_node" name="joy_vehicle_cmd_sender_node" output="screen" respawn="false" respawn_delay="0" />
 
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
 </launch>
