@@ -31,13 +31,13 @@ void joy_vehicle_cmd_sender::publish_vehicle_cmd_()
             double accel_input;
             double brake_input;
             double steer_input;
-            if(joy_cmd_->axes[2] < 0)
+            if(joy_cmd_->axes[1] < 0)
             {
                 accel_input = 0;
             }
             else
             {
-                accel_input = joy_cmd_->axes[2];
+                accel_input = joy_cmd_->axes[1];
             }
             if(joy_cmd_->axes[3] < 0)
             {
@@ -59,8 +59,15 @@ void joy_vehicle_cmd_sender::publish_vehicle_cmd_()
             twist_cmd.angular.x = 0;
             twist_cmd.angular.y = 0;
             twist_cmd.angular.z = twist_cmd.linear.x * steering_ratio * steer_input;
+
+            autoware_msgs::ControlCommand ctrl_cmd;
+            ctrl_cmd.linear_acceleration = 0.0;
+            ctrl_cmd.linear_velocity = accel_input * accel_ratio;   // [m/s]
+            ctrl_cmd.steering_angle = steer_input * steering_ratio; // [rad]
+
             autoware_msgs::VehicleCmd vehicle_cmd;
             vehicle_cmd.twist_cmd.twist = twist_cmd;
+            vehicle_cmd.ctrl_cmd = ctrl_cmd;
             vehicle_cmd_pub_.publish(vehicle_cmd);
         }
         rate.sleep();
